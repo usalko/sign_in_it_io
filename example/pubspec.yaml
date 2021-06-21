@@ -1,0 +1,28 @@
+name: sign_in_it_io_example
+description: Example app for google_sign_in_dart
+
+
+environment:
+  sdk: '>=2.13.0 <3.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^0.13.0
+  url_launcher: ^6.0.6
+  googleapis: ^3.0.0
+  googleapis_auth: ^1.1.0
+  extension_google_sign_in_as_googleapis_auth: ^2.0.2
+
+  google_sign_in: ^5.0.4
+  sign_in_it_io:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  pedantic: ^1.9.2
+
+flutter:
+  uses-material-design: true
