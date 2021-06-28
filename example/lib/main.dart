@@ -14,20 +14,23 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_it_io/sign_in_it_io.dart';
 import 'package:googleapis/gmail/v1.dart';
 import 'package:googleapis/people/v1.dart';
+import 'package:googleapis/drive/v3.dart';
 import 'package:googleapis_auth/auth.dart';
 
 import 'platform_js.dart' if (dart.library.io) 'platform_io.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: <String>['email', 'profile', PeopleServiceApi.contactsReadonlyScope]);
+    scopes: <String>[DriveApi.driveReadonlyScope],
+    hostedDomain: 'localhost',
+    clientId: '682163898492-hdplsjm64mgv0e7fv57qn19jg531ofs0.apps.googleusercontent.com');
 
 Future<void> main() async {
   if (isDesktop) {
     await SignInItIo.register(
       exchangeEndpoint:
-          'http://localhost:8080/',
+          'http://127.0.0.1:43433/',
       clientId:
-          '233259864964-go57eg1ones74e03adlqvbtg2av6tivb.apps.googleusercontent.com',
+          '682163898492-hdplsjm64mgv0e7fv57qn19jg531ofs0.apps.googleusercontent.com',
       failUrl: '',
       presenter: null,
       storage:  null,
@@ -71,30 +74,27 @@ class SignInDemoState extends State<SignInDemo> {
   }
 
   Future<void> _handleGetContact() async {
-    setState(() => _contactText = 'Loading contact info...');
+    setState(() => _contactText = 'Loading drive info...');
 
-    final PeopleConnectionsResource connectionsApi =
-        PeopleServiceApi(_client!).people.connections;
+    final FilesResource connectionsApi =
+        DriveApi(_client!).files;
 
-    final ListConnectionsResponse listResult = await connectionsApi.list(
-      'people/me',
-      requestMask_includeField: 'person.names',
-    );
+    final FileList listResult = await connectionsApi.list();
 
     String? contact;
-    final List<Person>? connections = listResult.connections;
-    if (connections != null && connections.isNotEmpty) {
-      connections.shuffle();
-      final Person? person = connections.firstWhere(
-        (Person person) =>
-            person.names!.any((Name name) => name.displayName != null),
-        orElse: () => Person(),
+    final List<File>? files = listResult.files;
+    if (files != null && files.isNotEmpty) {
+      files.shuffle();
+      final File? file = files.firstWhere(
+        (File file) =>
+            file.name != null,
+        orElse: () => File(),
       );
 
-      if (person != null) {
-        final Name name =
-            person.names!.firstWhere((Name name) => name.displayName != null);
-        contact = name.displayName!;
+      if (file != null) {
+        final String? name =
+            file.name;
+        contact = name;
       }
     }
 

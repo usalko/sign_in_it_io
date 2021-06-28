@@ -16,9 +16,10 @@ String _generateSecureRandomString(
     [Random? entropySource, int entropyBytes = 64]) {
   Random _secure = Random.secure();
   final StringBuffer buffer = StringBuffer();
+  entropySource = entropySource != null ? entropySource : _secure;
   int remainingLength = entropyBytes;
   while (remainingLength > 0) {
-    final int i = entropySource!.nextInt(_charset.length);
+    final int i = entropySource.nextInt(_charset.length);
     buffer.write(_charset[i]);
     remainingLength = entropyBytes - buffer.length;
   }

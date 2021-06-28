@@ -2,7 +2,6 @@
 // Lung Razvan <long1eu>
 // on 02/03/2020
 
-
 part of 'sign_in_it_io.dart';
 
 /// Creates an authentication Uri and listens on the local web server for the
@@ -26,8 +25,10 @@ Future<Map<String, dynamic>> _codeExchangeSignIn({
   final String codeVerifierChallenge =
       _deriveCodeVerifierChallenge(codeVerifier);
 
+  // If exchange endpoint contains port use port otherwise use 0 (i.e. auto port)
+  
   final InternetAddress address = InternetAddress.loopbackIPv4;
-  final HttpServer server = await HttpServer.bind(address, 0);
+  final HttpServer server = await HttpServer.bind(address, 43433);
   final int port = server.port;
   final String redirectUrl = 'http://${address.host}:$port';
 

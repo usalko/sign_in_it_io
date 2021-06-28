@@ -13,7 +13,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart'
     as platform;
 import 'package:http/http.dart';
-import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -130,7 +129,7 @@ class SignInItIo extends platform.GoogleSignInPlatform {
     } else {
       _scopes = scopes;
     }
-    _hostedDomain = hostedDomain!;
+    _hostedDomain = hostedDomain;
     _initFromStore();
   }
 
@@ -241,7 +240,8 @@ class SignInItIo extends platform.GoogleSignInPlatform {
   Future<void> _revokeToken() async {
     if (_haveValidToken) {
       await get(
-        Uri.dataFromString('https://oauth2.googleapis.com/revoke?token=${_tokenData?.accessToken}'),
+        Uri.dataFromString(
+            'https://oauth2.googleapis.com/revoke?token=${_tokenData?.accessToken}'),
         headers: <String, String>{
           'content-type': 'application/x-www-form-urlencoded'
         },
@@ -339,8 +339,8 @@ class SignInItIo extends platform.GoogleSignInPlatform {
   }
 
   void _initFromStore() {
-    _refreshToken = _storage.refreshToken!;
-    _expiresAt = _storage.expiresAt!;
-    _tokenData = _storage.tokenData!;
+    _refreshToken = _storage.refreshToken;
+    _expiresAt = _storage.expiresAt;
+    _tokenData = _storage.tokenData;
   }
 }
